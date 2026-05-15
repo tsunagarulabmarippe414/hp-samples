@@ -8,501 +8,512 @@
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
-  --rose:      #c87890;
-  --rosegold:  #c8906a;
+  --champagne: #e8c88a;
+  --gold:      #c8a060;
+  --rose:      #d4808c;
   --blush:     #f0d0d8;
-  --champagne: #f5e8d8;
-  --pearl:     #fffaf7;
-  --deep:      #3a1828;
-  --text:      #4a2838;
-  --muted:     #9a7888;
-  --border:    rgba(200,120,144,0.18);
-  --gold:      #c8a070;
+  --cream:     #fffbf5;
+  --warm:      #fdf5e8;
+  --deep:      #2c1a10;
+  --text:      #3a2818;
+  --muted:     #9a8070;
+  --border:    rgba(200,160,80,0.2);
+  --white:     #ffffff;
 }
 html { scroll-behavior: smooth; }
-body { font-family: 'Noto Sans JP', sans-serif; color: var(--text); background: var(--pearl); overflow-x: hidden; }
+body { font-family: 'Noto Sans JP', sans-serif; color: var(--text); background: var(--cream); overflow-x: hidden; }
 
-/* ── スチーム粒子 ── */
-.steam-wrap { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
-.steam-p {
-  position: absolute; border-radius: 50%; pointer-events: none;
-  background: radial-gradient(circle, rgba(255,255,255,0.9), rgba(245,232,220,0.5), transparent);
-  animation: steamRise ease-in-out infinite;
-  filter: blur(3px);
-}
-@keyframes steamRise {
-  0%   { opacity: 0; transform: translateY(0) scale(0.5); }
-  25%  { opacity: 0.6; }
-  75%  { opacity: 0.2; }
-  100% { opacity: 0; transform: translateY(-80px) scale(1.8) rotate(20deg); }
-}
-/* キラキラ */
-.sparkle {
+/* ── キラキラパーティクル ── */
+.particle-wrap { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+.particle {
   position: absolute; pointer-events: none; opacity: 0;
-  animation: sparklePop ease-in-out infinite;
+  animation: particleFloat ease-in-out infinite;
 }
-@keyframes sparklePop {
-  0%,100%{ opacity:0; transform: scale(0.5) rotate(0deg); }
-  50%    { opacity:0.9; transform: scale(1.2) rotate(30deg); }
+@keyframes particleFloat {
+  0%   { opacity:0; transform: scale(0) translateY(0) rotate(0deg); }
+  30%  { opacity:1; }
+  70%  { opacity:0.5; }
+  100% { opacity:0; transform: scale(1.4) translateY(-50px) rotate(45deg); }
+}
+/* スチーム */
+.mist {
+  position: fixed; border-radius: 50%; pointer-events: none; z-index: 0;
+  background: radial-gradient(circle, rgba(255,255,255,0.5), transparent);
+  animation: mistDrift ease-in-out infinite;
+  filter: blur(8px);
+}
+@keyframes mistDrift {
+  0%   { opacity:0; transform: translateY(0) scale(1); }
+  40%  { opacity:0.4; }
+  100% { opacity:0; transform: translateY(-60px) scale(2); }
 }
 
 /* ── NAV ── */
 nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 300; height: 64px;
-  background: rgba(255,250,247,0.95); backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border);
+  background: rgba(255,251,245,0.96); backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(200,160,80,0.2);
   display: flex; align-items: center; justify-content: space-between; padding: 0 5%;
 }
 .nav-logo {
   font-family: 'Cormorant Garamond', serif; font-style: italic;
-  font-size: 1.25rem; letter-spacing: 0.12em;
-  background: linear-gradient(135deg, var(--rose), var(--rosegold));
+  font-size: 1.3rem; letter-spacing: 0.12em;
+  background: linear-gradient(135deg, var(--gold), var(--champagne), var(--gold));
+  background-size: 200%; animation: logoShimmer 4s linear infinite;
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
   text-decoration: none;
 }
+@keyframes logoShimmer { 0%{background-position:0%;} 100%{background-position:200%;} }
 .nav-links { display: flex; gap: 1.8rem; list-style: none; }
 .nav-links a { font-size: 0.76rem; color: var(--muted); text-decoration: none; letter-spacing: 0.14em; transition: color 0.2s; }
-.nav-links a:hover { color: var(--rose); }
+.nav-links a:hover { color: var(--gold); }
 .nav-cta {
-  background: linear-gradient(135deg, var(--rose), var(--rosegold));
-  color: #fff; padding: 0.5rem 1.5rem; border-radius: 100px;
+  background: linear-gradient(135deg, #c8906a, var(--champagne), #c8906a);
+  background-size: 200%;
+  color: #fff; padding: 0.5rem 1.6rem; border-radius: 100px;
   text-decoration: none; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em;
-  box-shadow: 0 4px 16px rgba(200,120,144,0.3);
-  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 16px rgba(200,160,80,0.35);
+  transition: transform 0.2s, box-shadow 0.2s, background-position 0.4s;
 }
-.nav-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(200,120,144,0.45); }
+.nav-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(200,160,80,0.5); background-position: 100%; }
 
 /* ── HERO ── */
 .hero {
   min-height: 100vh; position: relative; z-index: 1; overflow: hidden;
   background:
-    radial-gradient(ellipse at 20% 40%, rgba(200,120,144,0.13) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 20%, rgba(200,144,106,0.12) 0%, transparent 45%),
-    radial-gradient(ellipse at 60% 80%, rgba(240,208,216,0.3) 0%, transparent 50%),
-    linear-gradient(160deg, #fff8f3 0%, #fdf0f5 50%, #fdf4ec 100%);
-  display: flex; align-items: center; justify-content: center;
-  text-align: center; padding: 110px 5% 80px;
+    radial-gradient(ellipse at 15% 50%, rgba(232,200,138,0.25) 0%, transparent 45%),
+    radial-gradient(ellipse at 85% 30%, rgba(212,128,140,0.18) 0%, transparent 45%),
+    radial-gradient(ellipse at 50% 90%, rgba(248,225,200,0.4) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 10%, rgba(255,240,210,0.5) 0%, transparent 40%),
+    linear-gradient(165deg, #fffbf0 0%, #fdf5e8 40%, #fff8f5 100%);
+  display: flex; align-items: center;
+  padding: 100px 5% 80px;
 }
 
-/* 女性シルエット（CSS アート） */
-.woman-art {
-  position: absolute; right: 6%; top: 50%; transform: translateY(-50%);
-  width: 280px; height: 380px; pointer-events: none; z-index: 0;
-  opacity: 0.85;
-}
-.woman-face {
-  position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-  width: 120px; height: 148px;
-  background: radial-gradient(ellipse at 40% 35%, #fde8d8, #f4c8b0 60%, #e8b098);
-  border-radius: 50% 50% 46% 46% / 48% 48% 52% 52%;
-  box-shadow: 0 8px 32px rgba(200,120,90,0.15), inset 0 -8px 20px rgba(200,100,80,0.08);
-}
-/* 光沢ハイライト */
-.woman-face::before {
-  content: '';
-  position: absolute; top: 18%; left: 22%; width: 28%; height: 22%;
-  background: radial-gradient(ellipse, rgba(255,255,255,0.7), transparent);
-  border-radius: 50%; transform: rotate(-20deg);
-}
-/* 頬のブラッシュ */
-.woman-face::after {
-  content: '';
-  position: absolute; bottom: 28%; left: 8%; right: 8%; height: 18%;
-  background: radial-gradient(ellipse, rgba(220,100,100,0.12), transparent);
-  border-radius: 50%;
-}
-/* 目 */
-.eye-l, .eye-r {
-  position: absolute; top: 36%; width: 14px; height: 7px;
-  background: #2a1010; border-radius: 50% 50% 50% 50% / 70% 70% 30% 30%;
-}
-.eye-l { left: 22%; }
-.eye-r { right: 22%; }
-/* まつ毛効果 */
-.eye-l::after, .eye-r::after {
-  content: '';
-  position: absolute; top: -3px; left: 0; right: 0; height: 3px;
-  background: #2a1010; border-radius: 50%; transform: scaleX(1.2);
-}
-/* 鼻 */
-.nose {
-  position: absolute; top: 52%; left: 50%; transform: translateX(-50%);
-  width: 14px; height: 10px;
-  border: none;
-  border-bottom: 2px solid rgba(160,80,60,0.3);
-  border-radius: 0 0 50% 50%;
-}
-/* 唇 */
-.lips {
-  position: absolute; bottom: 16%; left: 50%; transform: translateX(-50%);
-  width: 34px; height: 12px;
-}
-.lip-upper {
-  width: 100%; height: 6px;
-  background: linear-gradient(90deg, #d07080, #e08090, #d07080);
-  border-radius: 50% 50% 0 0;
-  clip-path: polygon(0 100%, 50% 0%, 100% 100%);
-}
-.lip-lower {
-  width: 100%; height: 7px; margin-top: -1px;
-  background: linear-gradient(90deg, #c06070, #d07080, #c06070);
-  border-radius: 0 0 50% 50%;
-}
-/* 髪 */
-.woman-hair {
-  position: absolute; top: -8px; left: 50%; transform: translateX(-50%);
-  width: 132px; height: 100px;
-  background: linear-gradient(160deg, #2a1828, #3d2035, #2a1828);
-  border-radius: 50% 50% 0 0;
-  z-index: -1;
-}
-.woman-hair::after {
-  content: '';
-  position: absolute; bottom: -30px; left: -10px; right: -10px; height: 40px;
-  background: linear-gradient(160deg, #2a1828, #3d2035);
-  border-radius: 0 0 40% 40%;
-}
-/* サイドヘア */
-.hair-side-l, .hair-side-r {
-  position: absolute; top: 20px; height: 80px; width: 24px;
-  background: linear-gradient(180deg, #2a1828, #3d2035, transparent);
-  border-radius: 0 0 50% 50%;
-}
-.hair-side-l { left: -6px; transform: rotate(-8deg); }
-.hair-side-r { right: -6px; transform: rotate(8deg); }
-/* ネック */
-.woman-neck {
-  position: absolute; top: 138px; left: 50%; transform: translateX(-50%);
-  width: 36px; height: 40px;
-  background: linear-gradient(180deg, #f4c8b0, #edc0a8);
-}
-/* 肩 */
-.woman-shoulder {
-  position: absolute; top: 170px; left: 50%; transform: translateX(-50%);
-  width: 160px; height: 80px;
-  background: linear-gradient(160deg, #fde8f0, #f8d0e0, #fde0ec);
-  border-radius: 0 0 50% 50%;
-}
-.woman-shoulder::before {
-  content: '';
-  position: absolute; inset: 0;
-  background: radial-gradient(ellipse at 40% 20%, rgba(255,255,255,0.5), transparent 60%);
-  border-radius: 0 0 50% 50%;
-}
-
-/* スチーム */
-.steam-art {
-  position: absolute; bottom: 60px; left: 50%; transform: translateX(-50%);
-  width: 200px; display: flex; justify-content: space-around;
-}
-.steam-line {
-  width: 3px; border-radius: 3px; opacity: 0;
-  background: linear-gradient(180deg, transparent, rgba(255,255,255,0.9), rgba(245,232,220,0.7), transparent);
-  animation: steamUp ease-in-out infinite;
-  filter: blur(2px);
-}
-@keyframes steamUp {
-  0%   { opacity:0; height:0; transform:translateY(0) scaleX(1); }
-  30%  { opacity:0.8; height:60px; }
-  70%  { opacity:0.4; height:90px; }
-  100% { opacity:0; height:80px; transform:translateY(-60px) scaleX(1.5); }
-}
-
-/* キラキラ光 */
-.glow-orb {
+/* ゴールドグロー */
+.hero-glow {
   position: absolute; border-radius: 50%; pointer-events: none;
-  animation: orbPulse ease-in-out infinite;
+  animation: glowPulse ease-in-out infinite;
+  filter: blur(40px);
 }
-@keyframes orbPulse {
-  0%,100%{ transform: scale(1); opacity: 0.4; }
-  50%    { transform: scale(1.08); opacity: 0.7; }
-}
+@keyframes glowPulse { 0%,100%{ opacity:0.35; transform:scale(1); } 50%{ opacity:0.6; transform:scale(1.1); } }
 
-.hero-content { position: relative; z-index: 2; max-width: 580px; }
-.hero-en {
-  font-family: 'Cormorant Garamond', serif; font-style: italic;
-  font-size: 0.75rem; letter-spacing: 0.35em; color: var(--rose);
-  margin-bottom: 1rem; display: flex; align-items: center; justify-content: center; gap: 0.8rem;
+/* サロン内装イメージ（右） */
+.salon-scene {
+  position: absolute; right: 4%; top: 50%; transform: translateY(-50%);
+  width: 320px; height: 320px; pointer-events: none; z-index: 1;
 }
-.hero-en::before, .hero-en::after { content: ''; flex: 1; max-width: 40px; height: 1px; background: linear-gradient(90deg, transparent, var(--rose)); }
-.hero-en::after { background: linear-gradient(270deg, transparent, var(--rose)); }
+.salon-circle {
+  width: 100%; height: 100%; border-radius: 50%; overflow: hidden;
+  background:
+    radial-gradient(ellipse at 30% 25%, rgba(255,248,235,0.95), rgba(248,235,210,0.9) 40%, rgba(240,218,190,0.85));
+  border: 3px solid rgba(200,168,100,0.35);
+  box-shadow:
+    0 0 0 8px rgba(232,200,138,0.12),
+    0 0 0 16px rgba(232,200,138,0.06),
+    0 24px 80px rgba(200,160,80,0.2),
+    inset 0 0 60px rgba(255,250,235,0.5);
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+}
+.salon-circle::before {
+  content: '';
+  position: absolute; inset: 10px; border-radius: 50%;
+  background: radial-gradient(ellipse at 35% 30%, rgba(255,255,255,0.6), transparent 60%);
+}
+.salon-icon { font-size: 6rem; position: relative; z-index: 2; filter: drop-shadow(0 4px 20px rgba(200,160,80,0.3)); }
+/* サロン装飾 */
+.salon-deco {
+  position: absolute; font-size: 1.8rem;
+  filter: drop-shadow(0 2px 8px rgba(200,160,80,0.3));
+  animation: decoFloat ease-in-out infinite;
+}
+@keyframes decoFloat { 0%,100%{transform:translateY(0) rotate(-5deg);} 50%{transform:translateY(-10px) rotate(5deg);} }
+
+/* キラキラ四方形 */
+.sparkle-cross {
+  position: absolute; pointer-events: none;
+  animation: crossSpark ease-in-out infinite;
+}
+@keyframes crossSpark { 0%,100%{opacity:0;transform:scale(0.5);} 50%{opacity:1;transform:scale(1);} }
+
+.hero-inner { position: relative; z-index: 2; max-width: 560px; }
+.hero-label {
+  display: flex; align-items: center; gap: 0.8rem;
+  font-family: 'Cormorant Garamond', serif; font-style: italic;
+  font-size: 0.72rem; letter-spacing: 0.38em; color: var(--gold); text-transform: uppercase;
+  margin-bottom: 1.2rem;
+}
+.hero-label::before, .hero-label::after {
+  content: ''; flex: 1; max-width: 36px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold));
+}
+.hero-label::after { background: linear-gradient(270deg, transparent, var(--gold)); }
 
 .hero-badge {
-  display: inline-block;
-  font-size: 0.68rem; letter-spacing: 0.28em; color: var(--rosegold);
-  border: 1px solid rgba(200,144,106,0.4); border-radius: 100px;
-  padding: 0.4em 2em; margin-bottom: 1.6rem; text-transform: uppercase;
-  background: rgba(255,255,255,0.6); backdrop-filter: blur(8px);
+  display: inline-block; font-size: 0.66rem; letter-spacing: 0.24em; color: var(--muted);
+  border: 1px solid rgba(200,160,80,0.3); border-radius: 100px;
+  padding: 0.35em 1.8em; margin-bottom: 1.4rem;
+  background: rgba(255,255,255,0.7); backdrop-filter: blur(8px);
+  text-transform: uppercase;
 }
 .hero h1 {
   font-family: 'Cormorant Garamond', serif; font-style: italic;
-  font-size: clamp(2.4rem, 6vw, 4.2rem); font-weight: 300; letter-spacing: 0.06em;
-  line-height: 1.25; margin-bottom: 0.8rem;
-  background: linear-gradient(135deg, var(--deep) 0%, var(--rose) 40%, var(--rosegold) 60%, var(--deep) 100%);
-  background-size: 250%; animation: shimmer 7s linear infinite;
+  font-size: clamp(2.8rem, 6vw, 4.8rem); font-weight: 300; letter-spacing: 0.06em;
+  line-height: 1.2; margin-bottom: 0.6rem;
+  background: linear-gradient(135deg, #8a5010 0%, var(--champagne) 30%, #fff5e0 50%, var(--gold) 70%, #6a3808 100%);
+  background-size: 300%; animation: titleShimmer 8s linear infinite;
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  text-shadow: none; filter: drop-shadow(0 2px 12px rgba(200,160,80,0.15));
 }
-@keyframes shimmer { 0%{background-position:0% 50%;} 100%{background-position:250% 50%;} }
+@keyframes titleShimmer { 0%{background-position:0% 50%;} 100%{background-position:300% 50%;} }
 .hero-jp {
   font-family: 'Noto Serif JP', serif;
-  font-size: clamp(0.95rem, 2vw, 1.1rem); font-weight: 300;
-  color: var(--text); letter-spacing: 0.16em; margin-bottom: 1rem;
+  font-size: 1rem; font-weight: 300; color: var(--muted);
+  letter-spacing: 0.22em; margin-bottom: 1.4rem;
+}
+.hero-copy {
+  font-family: 'Noto Serif JP', serif;
+  font-size: clamp(1rem, 2.2vw, 1.15rem); font-weight: 300;
+  color: var(--text); letter-spacing: 0.1em; line-height: 2;
+  margin-bottom: 0.8rem;
+  background: linear-gradient(135deg, var(--deep), #6a4028);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
 }
 .hero-sub {
-  font-size: clamp(0.83rem, 1.8vw, 0.93rem); color: var(--muted);
-  line-height: 2.4; margin-bottom: 2.4rem; font-weight: 300;
+  font-size: 0.88rem; color: var(--muted); line-height: 2.5;
+  margin-bottom: 2.6rem; font-weight: 300;
 }
-.hero-buttons { display: flex; flex-wrap: wrap; gap: 1.2rem; justify-content: center; }
-.btn-main {
-  background: linear-gradient(135deg, var(--rose), var(--rosegold));
+.hero-buttons { display: flex; flex-wrap: wrap; gap: 1.2rem; }
+.btn-gold {
+  background: linear-gradient(135deg, #b87838, var(--champagne), #b87838);
+  background-size: 200%;
   color: #fff; padding: 1rem 2.8rem; border-radius: 100px;
-  text-decoration: none; font-size: 0.9rem; font-weight: 700; letter-spacing: 0.06em;
-  box-shadow: 0 8px 28px rgba(200,120,144,0.38); transition: transform 0.25s, box-shadow 0.25s;
+  text-decoration: none; font-size: 0.9rem; font-weight: 700; letter-spacing: 0.08em;
+  box-shadow: 0 8px 28px rgba(200,160,80,0.4), inset 0 1px 0 rgba(255,255,255,0.3);
+  transition: transform 0.25s, box-shadow 0.25s, background-position 0.4s;
 }
-.btn-main:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(200,120,144,0.52); }
-.btn-sub {
+.btn-gold:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(200,160,80,0.55); background-position: 100%; }
+.btn-outline {
   background: rgba(255,255,255,0.85); color: var(--deep);
   padding: 1rem 2.8rem; border-radius: 100px;
   text-decoration: none; font-size: 0.9rem; font-weight: 700;
-  border: 1.5px solid rgba(200,120,144,0.35); backdrop-filter: blur(8px);
-  transition: background 0.2s;
+  border: 1.5px solid rgba(200,160,80,0.4); backdrop-filter: blur(8px);
+  transition: background 0.2s, transform 0.2s;
 }
-.btn-sub:hover { background: rgba(200,120,144,0.07); }
+.btn-outline:hover { background: rgba(232,200,138,0.1); transform: translateY(-2px); }
+
+/* 実績バッジ */
+.hero-stats {
+  display: flex; gap: 1.4rem; margin-top: 2.4rem; flex-wrap: wrap;
+}
+.stat-item {
+  background: rgba(255,255,255,0.8); backdrop-filter: blur(8px);
+  border: 1px solid rgba(200,160,80,0.25); border-radius: 16px;
+  padding: 0.7rem 1.2rem; text-align: center;
+}
+.stat-num {
+  font-family: 'Cormorant Garamond', serif; font-style: italic;
+  font-size: 1.5rem; font-weight: 600; letter-spacing: 0.04em;
+  background: linear-gradient(135deg, var(--gold), var(--champagne));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.stat-label { font-size: 0.7rem; color: var(--muted); letter-spacing: 0.12em; }
 
 /* ── SECTION BASE ── */
 section { padding: 90px 5%; position: relative; }
 .sec-en {
   text-align: center; font-family: 'Cormorant Garamond', serif; font-style: italic;
-  font-size: 0.72rem; letter-spacing: 0.32em; color: var(--rose); text-transform: uppercase;
+  font-size: 0.7rem; letter-spacing: 0.36em; color: var(--gold); text-transform: uppercase;
   margin-bottom: 0.4rem;
 }
 .sec-title {
   text-align: center; font-family: 'Noto Serif JP', serif;
   font-size: clamp(1.4rem, 3.5vw, 2rem); font-weight: 400; color: var(--deep);
-  line-height: 1.5; margin-bottom: 0.5rem; letter-spacing: 0.1em;
+  line-height: 1.5; margin-bottom: 0.5rem; letter-spacing: 0.12em;
 }
-.gold-line {
-  width: 48px; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent);
+.gold-divider {
+  display: flex; align-items: center; justify-content: center; gap: 0.6rem;
   margin: 0.8rem auto 1.6rem;
 }
+.gold-divider::before, .gold-divider::after {
+  content: ''; width: 60px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold));
+}
+.gold-divider::after { background: linear-gradient(270deg, transparent, var(--gold)); }
+.gold-divider span { font-size: 0.65rem; color: var(--gold); letter-spacing: 0.3em; }
 .sec-sub {
-  text-align: center; font-size: 0.88rem; line-height: 2.4;
+  text-align: center; font-size: 0.88rem; line-height: 2.5;
   max-width: 520px; margin: 0 auto 3rem; font-weight: 300; color: var(--muted);
 }
 
 /* ── CONCEPT ── */
 .concept { background: #fff; }
 .concept-inner {
-  max-width: 900px; margin: 0 auto;
-  display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
+  max-width: 940px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 1.4fr; gap: 5rem; align-items: center;
 }
-/* CSS art: スチームフェイシャルシーン */
-.concept-art {
-  position: relative; aspect-ratio: 4/5;
-  border-radius: 48% 52% 45% 55% / 50% 48% 52% 50%;
+.concept-visual {
+  position: relative;
+}
+.concept-frame {
+  aspect-ratio: 3/4;
+  border-radius: 48% 52% 44% 56% / 52% 48% 52% 48%;
   background:
-    radial-gradient(ellipse at 35% 30%, rgba(253,232,240,0.9), rgba(248,210,225,0.6) 50%, rgba(240,192,210,0.3));
-  border: 1.5px solid rgba(200,120,144,0.18);
-  box-shadow: 0 24px 64px rgba(200,120,144,0.12), inset 0 0 40px rgba(255,255,255,0.5);
-  display: flex; align-items: center; justify-content: center;
-  overflow: hidden;
+    radial-gradient(ellipse at 30% 25%, rgba(255,248,230,0.95), rgba(248,230,200,0.7) 50%, rgba(235,210,175,0.5));
+  border: 2px solid rgba(200,168,100,0.3);
+  box-shadow:
+    0 30px 80px rgba(200,160,80,0.15),
+    0 0 0 6px rgba(232,200,138,0.1),
+    inset 0 0 50px rgba(255,250,235,0.6);
+  display: flex; align-items: center; justify-content: center; overflow: hidden;
+  position: relative;
 }
-.concept-art-icon { font-size: 5rem; position: relative; z-index: 2; filter: drop-shadow(0 4px 16px rgba(200,120,144,0.3)); }
-/* 背景グロー */
-.concept-art::before {
+.concept-frame::before {
   content: '';
-  position: absolute; top: 10%; left: 10%; right: 10%; bottom: 10%;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(255,240,248,0.8), transparent 70%);
+  position: absolute; top: 12%; left: 12%; width: 35%; height: 28%;
+  background: radial-gradient(ellipse, rgba(255,255,255,0.7), transparent);
+  border-radius: 50%; transform: rotate(-25deg);
 }
-/* ゴールドデコ */
-.concept-art::after {
+.concept-emoji { font-size: 6.5rem; position: relative; z-index: 2; filter: drop-shadow(0 6px 20px rgba(200,160,80,0.25)); }
+.concept-frame::after {
   content: '✦  ✦  ✦';
-  position: absolute; bottom: 14%; font-size: 0.8rem; letter-spacing: 0.5em;
-  color: rgba(200,160,112,0.5);
+  position: absolute; bottom: 12%; font-size: 0.7rem; letter-spacing: 0.6em; color: rgba(200,168,100,0.5);
 }
+/* 花デコ */
+.concept-flower {
+  position: absolute; font-size: 2rem;
+  animation: flowerFloat ease-in-out infinite;
+  filter: drop-shadow(0 2px 8px rgba(200,120,100,0.2));
+}
+@keyframes flowerFloat { 0%,100%{transform:rotate(-8deg) translateY(0);} 50%{transform:rotate(8deg) translateY(-12px);} }
 
 .concept-text h3 {
   font-family: 'Cormorant Garamond', serif; font-style: italic;
-  font-size: 1.7rem; font-weight: 300; color: var(--deep);
-  line-height: 1.7; margin-bottom: 1.4rem;
+  font-size: 1.8rem; font-weight: 300; color: var(--deep);
+  line-height: 1.8; margin-bottom: 1.6rem;
+  background: linear-gradient(135deg, var(--deep), #6a3808);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
 }
 .concept-text p {
-  font-size: 0.9rem; line-height: 2.6; color: var(--text);
+  font-size: 0.9rem; line-height: 2.8; color: var(--text);
   margin-bottom: 1rem; font-weight: 300;
 }
-.concept-point {
-  margin-top: 1.6rem; padding: 1.4rem 1.6rem;
-  background: linear-gradient(135deg, rgba(253,232,240,0.6), rgba(245,232,216,0.4));
-  border-radius: 16px; border-left: 3px solid var(--rose);
+.concept-feature {
+  margin-top: 2rem; display: flex; flex-direction: column; gap: 0.8rem;
 }
-.concept-point p { font-size: 0.85rem; color: var(--text); margin: 0; line-height: 2; }
-.concept-point strong { color: var(--rose); }
+.feature-row {
+  display: flex; align-items: flex-start; gap: 1rem;
+  padding: 0.9rem 1.2rem;
+  background: linear-gradient(135deg, rgba(255,248,230,0.7), rgba(245,235,215,0.4));
+  border-radius: 14px; border-left: 3px solid var(--champagne);
+}
+.feature-icon { font-size: 1.4rem; flex-shrink: 0; }
+.feature-text h5 { font-size: 0.88rem; font-weight: 700; color: var(--deep); margin-bottom: 0.2rem; }
+.feature-text p  { font-size: 0.8rem; color: var(--muted); line-height: 1.8; margin: 0; }
 
 /* ── MENU ── */
-.menu { background: linear-gradient(160deg, var(--pearl), #fdf4f8); }
+.menu {
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(232,200,138,0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 50%, rgba(212,128,140,0.1) 0%, transparent 50%),
+    linear-gradient(160deg, var(--cream), var(--warm));
+}
 .menu-grid {
-  max-width: 860px; margin: 0 auto;
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.8rem;
+  max-width: 900px; margin: 0 auto;
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;
 }
 .menu-card {
-  background: #fff; border-radius: 28px; overflow: hidden;
-  border: 1.5px solid var(--border);
-  box-shadow: 0 6px 28px rgba(200,120,144,0.07);
+  background: rgba(255,255,255,0.95); border-radius: 32px; overflow: hidden;
+  border: 1.5px solid rgba(200,168,100,0.2);
+  box-shadow: 0 8px 32px rgba(200,160,80,0.08);
   transition: transform 0.3s, box-shadow 0.3s;
   position: relative;
 }
-.menu-card:hover { transform: translateY(-8px); box-shadow: 0 20px 50px rgba(200,120,144,0.18); }
-.menu-thumb {
-  height: 130px; display: flex; align-items: center; justify-content: center;
-  font-size: 3.2rem; position: relative; overflow: hidden;
+.menu-card:hover { transform: translateY(-10px); box-shadow: 0 24px 60px rgba(200,160,80,0.2); }
+.menu-card-top {
+  height: 150px; display: flex; align-items: center; justify-content: center;
+  font-size: 3.5rem; position: relative; overflow: hidden;
 }
-.mt1 { background: linear-gradient(145deg, #fde8f0, #f8c8d8, #fde0ec); }
-.mt2 { background: linear-gradient(145deg, #fdf0e8, #f4d8c0, #fde8d8); }
-.mt3 { background: linear-gradient(145deg, #f8e8f8, #e8c8f0, #f0d8f8); }
-.menu-thumb::after {
+.mc1 { background: linear-gradient(145deg, #fff0e0, #f8d8b8, #fde8c0); }
+.mc2 { background: linear-gradient(145deg, #fde8f0, #f8c8d8, #fde0e8); }
+.mc3 { background: linear-gradient(145deg, #fdf5e0, #f8e8c0, #fde8a8); }
+/* キラキラ光沢 */
+.menu-card-top::before {
+  content: ''; position: absolute; top: 0; left: -50%; width: 40%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+  transform: skewX(-20deg); transition: left 0.5s;
+}
+.menu-card:hover .menu-card-top::before { left: 120%; }
+.menu-card-top::after {
   content: '✦'; position: absolute; top: 10px; right: 14px;
-  font-size: 0.75rem; color: rgba(200,160,112,0.6);
+  font-size: 0.8rem; color: rgba(200,160,80,0.6);
 }
-.menu-body { padding: 1.4rem 1.6rem 1.8rem; }
-.menu-tag { font-size: 0.65rem; color: var(--gold); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 0.5rem; }
+/* ランク帯 */
+.menu-ribbon {
+  position: absolute; top: 16px; left: -8px;
+  background: linear-gradient(135deg, var(--gold), var(--champagne));
+  color: #fff; font-size: 0.62rem; font-weight: 700; letter-spacing: 0.14em;
+  padding: 0.3em 1.2em; border-radius: 0 100px 100px 0;
+  box-shadow: 2px 2px 8px rgba(200,160,80,0.3);
+}
+.menu-body { padding: 1.6rem 1.8rem 2rem; }
 .menu-name { font-family: 'Noto Serif JP', serif; font-size: 1rem; font-weight: 400; color: var(--deep); margin-bottom: 0.6rem; letter-spacing: 0.08em; }
-.menu-desc { font-size: 0.8rem; color: var(--muted); line-height: 2; margin-bottom: 1rem; font-weight: 300; }
+.menu-desc { font-size: 0.8rem; color: var(--muted); line-height: 2.1; margin-bottom: 1.2rem; font-weight: 300; }
 .menu-price {
   font-family: 'Cormorant Garamond', serif; font-style: italic;
-  font-size: 1.4rem; font-weight: 600; letter-spacing: 0.04em;
-  background: linear-gradient(135deg, var(--rose), var(--rosegold));
+  font-size: 1.7rem; font-weight: 600;
+  background: linear-gradient(135deg, #8a5010, var(--champagne), #8a5010);
+  background-size: 200%;
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  animation: priceShimmer 4s linear infinite;
 }
-.menu-time { font-size: 0.76rem; color: var(--muted); margin-top: 0.2rem; }
+@keyframes priceShimmer { 0%{background-position:0%;} 100%{background-position:200%;} }
+.menu-time { font-size: 0.76rem; color: var(--muted); margin-top: 0.2rem; letter-spacing: 0.08em; }
 
 /* ── FLOW ── */
 .flow { background: #fff; }
 .flow-list {
-  max-width: 680px; margin: 0 auto;
-  display: flex; flex-direction: column; gap: 0;
+  max-width: 700px; margin: 0 auto;
 }
 .flow-item {
-  display: flex; gap: 1.6rem; align-items: flex-start;
-  padding: 1.6rem 0; position: relative;
+  display: flex; gap: 1.8rem; align-items: flex-start;
+  padding: 1.8rem 0; position: relative;
 }
 .flow-item:not(:last-child)::after {
   content: '';
-  position: absolute; left: 22px; top: 56px; bottom: 0; width: 1px;
-  background: linear-gradient(180deg, rgba(200,120,144,0.4), rgba(200,144,106,0.2));
+  position: absolute; left: 24px; top: 60px; bottom: 0; width: 1px;
+  background: linear-gradient(180deg, rgba(200,168,100,0.5), rgba(232,200,138,0.2));
 }
 .flow-num {
-  flex-shrink: 0; width: 44px; height: 44px; border-radius: 50%;
-  background: linear-gradient(135deg, var(--rose), var(--rosegold));
+  flex-shrink: 0; width: 48px; height: 48px; border-radius: 50%;
+  background: linear-gradient(135deg, #b87838, var(--champagne));
   color: #fff; display: flex; align-items: center; justify-content: center;
   font-family: 'Cormorant Garamond', serif; font-style: italic;
-  font-size: 1.1rem; font-weight: 600;
-  box-shadow: 0 4px 16px rgba(200,120,144,0.3);
+  font-size: 1.2rem; font-weight: 600;
+  box-shadow: 0 4px 16px rgba(200,160,80,0.35), 0 0 0 3px rgba(232,200,138,0.2);
 }
 .flow-content h4 {
-  font-family: 'Noto Serif JP', serif; font-size: 0.98rem; font-weight: 400;
-  color: var(--deep); margin-bottom: 0.4rem; letter-spacing: 0.06em;
+  font-family: 'Noto Serif JP', serif; font-size: 1rem; font-weight: 400;
+  color: var(--deep); margin-bottom: 0.5rem; letter-spacing: 0.08em;
 }
-.flow-content p { font-size: 0.84rem; color: var(--muted); line-height: 2; font-weight: 300; }
+.flow-content p { font-size: 0.84rem; color: var(--muted); line-height: 2.2; font-weight: 300; }
 
 /* ── VOICE ── */
-.voices { background: linear-gradient(160deg, var(--pearl), #fdf4f8); }
+.voices {
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(232,200,138,0.12) 0%, transparent 50%),
+    linear-gradient(160deg, var(--cream), var(--warm));
+}
 .voice-grid {
-  max-width: 860px; margin: 0 auto;
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.6rem;
+  max-width: 900px; margin: 0 auto;
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.8rem;
 }
 .voice-card {
-  background: #fff; border-radius: 24px; padding: 2rem 1.8rem;
-  border: 1px solid var(--border);
-  box-shadow: 0 4px 20px rgba(200,120,144,0.06);
+  background: rgba(255,255,255,0.95); border-radius: 24px; padding: 2.2rem 1.8rem;
+  border: 1px solid rgba(200,168,100,0.18);
+  box-shadow: 0 6px 24px rgba(200,160,80,0.07);
   position: relative;
 }
 .voice-card::before {
-  content: '"'; position: absolute; top: -10px; left: 18px;
-  font-family: 'Cormorant Garamond', serif; font-size: 4rem; font-style: italic;
-  background: linear-gradient(135deg, var(--rose), var(--rosegold));
+  content: '"'; position: absolute; top: -14px; left: 20px;
+  font-family: 'Cormorant Garamond', serif; font-size: 5rem; font-style: italic;
+  background: linear-gradient(135deg, var(--champagne), var(--gold));
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
   line-height: 1;
 }
-.voice-stars { font-size: 0.75rem; color: var(--gold); letter-spacing: 0.1em; margin-bottom: 0.8rem; }
-.voice-text { font-size: 0.86rem; color: var(--text); line-height: 2.2; margin-bottom: 1.2rem; font-weight: 300; }
-.voice-name { font-size: 0.76rem; color: var(--muted); text-align: right; letter-spacing: 0.1em; }
+.voice-stars { font-size: 0.75rem; color: var(--champagne); letter-spacing: 0.15em; margin-bottom: 1rem; }
+.voice-text { font-size: 0.86rem; color: var(--text); line-height: 2.4; margin-bottom: 1.4rem; font-weight: 300; }
+.voice-line { height: 1px; background: linear-gradient(90deg, transparent, rgba(200,168,100,0.3), transparent); margin-bottom: 1rem; }
+.voice-name { font-size: 0.76rem; color: var(--muted); text-align: right; letter-spacing: 0.12em; }
 
 /* ── CONTACT ── */
 .contact {
   background:
-    radial-gradient(ellipse at 30% 50%, rgba(200,120,144,0.1) 0%, transparent 55%),
-    radial-gradient(ellipse at 70% 50%, rgba(200,144,106,0.08) 0%, transparent 55%),
-    var(--pearl);
+    radial-gradient(ellipse at 30% 50%, rgba(232,200,138,0.18) 0%, transparent 55%),
+    radial-gradient(ellipse at 70% 50%, rgba(212,128,140,0.1) 0%, transparent 55%),
+    linear-gradient(160deg, var(--cream), #fff8f5);
   text-align: center;
 }
 .contact-box {
-  max-width: 520px; margin: 0 auto;
-  background: rgba(255,255,255,0.88); backdrop-filter: blur(20px);
-  border-radius: 36px; padding: 3.4rem 2.8rem;
-  border: 1.5px solid var(--border);
-  box-shadow: 0 20px 56px rgba(200,120,144,0.1);
+  max-width: 540px; margin: 0 auto;
+  background: rgba(255,255,255,0.9); backdrop-filter: blur(20px);
+  border-radius: 40px; padding: 3.6rem 3rem;
+  border: 1.5px solid rgba(200,168,100,0.22);
+  box-shadow: 0 24px 64px rgba(200,160,80,0.12), 0 0 0 6px rgba(232,200,138,0.06);
 }
-.contact-box p { font-size: 0.88rem; color: var(--muted); line-height: 2.5; margin-bottom: 2rem; font-weight: 300; }
+.contact-box p { font-size: 0.9rem; color: var(--muted); line-height: 2.6; margin-bottom: 2.2rem; font-weight: 300; }
 .sns-row { display: flex; flex-direction: column; gap: 1rem; }
-.sns-btn { display: block; padding: 1rem 1.8rem; border-radius: 16px; text-decoration: none; font-size: 0.9rem; font-weight: 700; letter-spacing: 0.04em; transition: transform 0.2s, opacity 0.2s; }
+.sns-btn {
+  display: block; padding: 1rem 2rem; border-radius: 18px;
+  text-decoration: none; font-size: 0.9rem; font-weight: 700; letter-spacing: 0.05em;
+  transition: transform 0.2s, opacity 0.2s;
+}
 .sns-btn:hover { transform: translateY(-3px); opacity: 0.88; }
 .sns-ig   { background: linear-gradient(90deg, #f58529, #dd2a7b, #8134af); color: #fff; }
 .sns-line { background: #06c755; color: #fff; }
-.sns-mail {
-  background: linear-gradient(135deg, var(--rose), var(--rosegold)); color: #fff;
-  box-shadow: 0 6px 20px rgba(200,120,144,0.3);
+.sns-gold {
+  background: linear-gradient(135deg, #b87838, var(--champagne), #b87838);
+  background-size: 200%; color: #fff;
+  box-shadow: 0 6px 20px rgba(200,160,80,0.35);
+  animation: btnShimmer 4s linear infinite;
 }
+@keyframes btnShimmer { 0%{background-position:0%;} 100%{background-position:200%;} }
 
 /* ── FOOTER ── */
 footer {
-  background: var(--deep); color: rgba(255,255,255,0.3);
-  padding: 2.8rem 5%; text-align: center; font-size: 0.75rem;
+  background: var(--deep); color: rgba(255,255,255,0.28);
+  padding: 3rem 5%; text-align: center; font-size: 0.75rem;
 }
 .footer-logo {
   font-family: 'Cormorant Garamond', serif; font-style: italic;
-  font-size: 1.9rem; letter-spacing: 0.14em;
-  background: linear-gradient(135deg, rgba(200,120,144,0.9), rgba(200,144,106,0.8));
+  font-size: 2rem; letter-spacing: 0.16em;
+  background: linear-gradient(135deg, rgba(200,168,100,0.9), rgba(232,200,138,0.8), rgba(200,168,100,0.9));
+  background-size: 200%; animation: logoShimmer 5s linear infinite;
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.4rem;
 }
-.footer-jp { font-size: 0.72rem; letter-spacing: 0.2em; color: rgba(255,255,255,0.25); margin-bottom: 1rem; }
-footer a { color: rgba(200,160,144,0.8); text-decoration: none; }
+.footer-jp { font-size: 0.7rem; letter-spacing: 0.25em; color: rgba(255,255,255,0.2); margin-bottom: 1.2rem; }
+footer a { color: rgba(200,168,100,0.7); text-decoration: none; }
 
+@media (max-width: 900px) {
+  .menu-grid { grid-template-columns: 1fr; max-width: 420px; }
+  .voice-grid { grid-template-columns: 1fr; max-width: 480px; }
+}
 @media (max-width: 768px) {
   .nav-links { display: none; }
-  .concept-inner { grid-template-columns: 1fr; gap: 2.5rem; }
-  .concept-art { max-width: 260px; margin: 0 auto; }
-  .woman-art { display: none; }
+  .concept-inner { grid-template-columns: 1fr; gap: 3rem; }
+  .concept-frame { max-width: 260px; margin: 0 auto; }
+  .salon-scene { display: none; }
+  .hero { align-items: center; text-align: center; }
+  .hero-buttons { justify-content: center; }
+  .hero-stats { justify-content: center; }
 }
 @media (max-width: 480px) {
-  .hero { padding: 100px 5% 60px; }
-  .hero h1 { font-size: 2.2rem; }
+  .hero h1 { font-size: 2.4rem; }
   .hero-sub { font-size: 0.82rem; }
   .hero-buttons { flex-direction: column; align-items: center; }
-  .btn-main, .btn-sub { width: 100%; max-width: 280px; text-align: center; }
+  .btn-gold, .btn-outline { width: 100%; max-width: 280px; text-align: center; }
   .sec-title { font-size: 1.3rem; }
-  .contact-box { padding: 2.2rem 1.4rem; }
-  .menu-grid { grid-template-columns: 1fr; }
+  .contact-box { padding: 2.4rem 1.4rem; }
 }
 </style>
 </head>
 <body>
 
-<!-- スチーム粒子 -->
-<div class="steam-wrap">
-  <div class="steam-p" style="width:18px;height:18px;left:8%;top:30%;animation-duration:5s;animation-delay:0s;"></div>
-  <div class="steam-p" style="width:14px;height:14px;left:22%;top:55%;animation-duration:7s;animation-delay:1.2s;"></div>
-  <div class="steam-p" style="width:20px;height:20px;left:40%;top:40%;animation-duration:6s;animation-delay:2.5s;"></div>
-  <div class="steam-p" style="width:12px;height:12px;left:60%;top:60%;animation-duration:8s;animation-delay:0.8s;"></div>
-  <div class="steam-p" style="width:16px;height:16px;left:75%;top:25%;animation-duration:5.5s;animation-delay:3s;"></div>
-  <div class="steam-p" style="width:22px;height:22px;left:88%;top:45%;animation-duration:6.5s;animation-delay:1.8s;"></div>
-  <!-- キラキラ -->
-  <div class="sparkle" style="left:12%;top:22%;animation-duration:3s;animation-delay:0s;font-size:1rem;color:rgba(200,160,112,0.7);">✦</div>
-  <div class="sparkle" style="left:30%;top:15%;animation-duration:4s;animation-delay:1s;font-size:0.8rem;color:rgba(200,120,144,0.6);">✦</div>
-  <div class="sparkle" style="left:65%;top:18%;animation-duration:3.5s;animation-delay:2s;font-size:1.1rem;color:rgba(200,160,112,0.6);">✦</div>
-  <div class="sparkle" style="left:82%;top:30%;animation-duration:4.5s;animation-delay:0.5s;font-size:0.9rem;color:rgba(200,120,144,0.5);">✦</div>
-  <div class="sparkle" style="left:50%;top:10%;animation-duration:3.8s;animation-delay:1.5s;font-size:0.75rem;color:rgba(200,144,106,0.6);">✦</div>
+<!-- パーティクル -->
+<div class="particle-wrap">
+  <div class="particle" style="left:5%;top:20%;animation-duration:4s;animation-delay:0s;font-size:1rem;color:rgba(200,168,100,0.7);">✦</div>
+  <div class="particle" style="left:18%;top:40%;animation-duration:5.5s;animation-delay:1s;font-size:0.75rem;color:rgba(212,128,140,0.6);">✦</div>
+  <div class="particle" style="left:32%;top:15%;animation-duration:4.5s;animation-delay:2.2s;font-size:1.1rem;color:rgba(200,168,100,0.65);">✦</div>
+  <div class="particle" style="left:50%;top:8%;animation-duration:3.8s;animation-delay:0.8s;font-size:0.8rem;color:rgba(200,168,100,0.55);">✦</div>
+  <div class="particle" style="left:68%;top:30%;animation-duration:5s;animation-delay:1.8s;font-size:1rem;color:rgba(212,128,140,0.5);">✦</div>
+  <div class="particle" style="left:82%;top:18%;animation-duration:4.2s;animation-delay:3s;font-size:0.9rem;color:rgba(200,168,100,0.6);">✦</div>
+  <div class="particle" style="left:90%;top:50%;animation-duration:6s;animation-delay:0.4s;font-size:0.75rem;color:rgba(200,168,100,0.5);">✦</div>
+  <!-- ミスト -->
+  <div class="mist" style="width:60px;height:60px;left:15%;top:50%;animation-duration:7s;animation-delay:0s;"></div>
+  <div class="mist" style="width:45px;height:45px;left:45%;top:35%;animation-duration:9s;animation-delay:2s;"></div>
+  <div class="mist" style="width:55px;height:55px;left:75%;top:55%;animation-duration:8s;animation-delay:4s;"></div>
 </div>
 
 <!-- NAV -->
@@ -512,6 +523,7 @@ footer a { color: rgba(200,160,144,0.8); text-decoration: none; }
     <li><a href="#concept">concept</a></li>
     <li><a href="#menu">menu</a></li>
     <li><a href="#flow">flow</a></li>
+    <li><a href="#voices">voice</a></li>
     <li><a href="#contact">contact</a></li>
   </ul>
   <a href="#contact" class="nav-cta">✦ ご予約</a>
@@ -521,49 +533,57 @@ footer a { color: rgba(200,160,144,0.8); text-decoration: none; }
 <section class="hero">
 
   <!-- 背景グロー -->
-  <div class="glow-orb" style="width:320px;height:320px;top:-80px;right:-60px;background:radial-gradient(circle at 40% 40%,rgba(253,232,240,0.7),rgba(200,120,144,0.15) 50%,transparent);"></div>
-  <div class="glow-orb" style="width:220px;height:220px;bottom:-40px;left:-40px;background:radial-gradient(circle at 40% 40%,rgba(245,232,216,0.6),rgba(200,144,106,0.12) 50%,transparent);animation-delay:1.5s;"></div>
+  <div class="hero-glow" style="width:400px;height:400px;top:-100px;left:-80px;background:radial-gradient(circle,rgba(232,200,138,0.5),transparent 70%);"></div>
+  <div class="hero-glow" style="width:300px;height:300px;bottom:-60px;right:380px;background:radial-gradient(circle,rgba(212,128,140,0.3),transparent 70%);animation-delay:2s;"></div>
 
-  <!-- 女性アート（右サイド） -->
-  <div class="woman-art">
-    <div class="woman-hair">
-      <div class="hair-side-l"></div>
-      <div class="hair-side-r"></div>
+  <!-- サロン内装シーン（右） -->
+  <div class="salon-scene">
+    <div class="salon-circle">
+      <div class="salon-icon">🛏️</div>
     </div>
-    <div class="woman-face">
-      <div class="eye-l"></div>
-      <div class="eye-r"></div>
-      <div class="nose"></div>
-      <div class="lips">
-        <div class="lip-upper"></div>
-        <div class="lip-lower"></div>
-      </div>
-    </div>
-    <div class="woman-neck"></div>
-    <div class="woman-shoulder"></div>
-    <!-- スチーム -->
-    <div class="steam-art">
-      <div class="steam-line" style="animation-duration:3s;animation-delay:0s;"></div>
-      <div class="steam-line" style="animation-duration:4s;animation-delay:0.8s;"></div>
-      <div class="steam-line" style="animation-duration:3.5s;animation-delay:1.4s;"></div>
-      <div class="steam-line" style="animation-duration:4.5s;animation-delay:0.4s;"></div>
-      <div class="steam-line" style="animation-duration:3.2s;animation-delay:2s;"></div>
-    </div>
+    <!-- デコ -->
+    <div class="salon-deco" style="top:-20px;left:10px;animation-duration:4s;animation-delay:0s;">🌸</div>
+    <div class="salon-deco" style="top:30px;right:-15px;animation-duration:5s;animation-delay:1s;">✨</div>
+    <div class="salon-deco" style="bottom:10px;left:-10px;animation-duration:4.5s;animation-delay:2s;">🌿</div>
+    <!-- キラキラ -->
+    <div class="sparkle-cross" style="top:-30px;right:30px;font-size:1.4rem;color:rgba(200,168,100,0.8);animation-duration:3s;animation-delay:0s;">✦</div>
+    <div class="sparkle-cross" style="bottom:20px;right:-20px;font-size:1rem;color:rgba(200,168,100,0.7);animation-duration:4s;animation-delay:1.5s;">✦</div>
+    <div class="sparkle-cross" style="top:50%;left:-30px;font-size:0.9rem;color:rgba(200,168,100,0.6);animation-duration:3.5s;animation-delay:0.8s;">✦</div>
   </div>
 
-  <div class="hero-content">
-    <p class="hero-en">Steam Facial Salon</p>
-    <div class="hero-badge">✦ Facial Esthetics ✦</div>
+  <!-- コンテンツ -->
+  <div class="hero-inner">
+    <p class="hero-label">Steam Facial Esthetics</p>
+    <div class="hero-badge">✦ Private Salon ✦</div>
+
     <h1>Brume<br>Beauté</h1>
     <p class="hero-jp">ブリューム・ボーテ</p>
+
+    <p class="hero-copy">蒸気に包まれる、素肌のための時間。</p>
     <p class="hero-sub">
-      スチームに包まれながら、素肌を奥から整える。<br>
-      顔だけに集中する、贅沢なフェイシャルの時間。✨<br>
-      あなたの美しさに、ていねいに向き合います。
+      スチームで毛穴を開き、奥の汚れをやさしく取り除く。<br>
+      顔だけに集中した、贅沢な60分のフェイシャルケア。<br>
+      あなたの素肌の輝きを、ていねいに引き出します。✨
     </p>
+
     <div class="hero-buttons">
-      <a href="#menu" class="btn-main">✦ メニューを見る</a>
-      <a href="#contact" class="btn-sub">✉️ ご予約・お問い合わせ</a>
+      <a href="#menu" class="btn-gold">✦ メニューを見る</a>
+      <a href="#contact" class="btn-outline">✉️ ご予約・お問い合わせ</a>
+    </div>
+
+    <div class="hero-stats">
+      <div class="stat-item">
+        <p class="stat-num">500<span style="font-size:1rem;">+</span></p>
+        <p class="stat-label">施術実績</p>
+      </div>
+      <div class="stat-item">
+        <p class="stat-num">98<span style="font-size:1rem;">%</span></p>
+        <p class="stat-label">リピート率</p>
+      </div>
+      <div class="stat-item">
+        <p class="stat-num">5<span style="font-size:1rem;">★</span></p>
+        <p class="stat-label">満足度</p>
+      </div>
     </div>
   </div>
 </section>
@@ -572,19 +592,43 @@ footer a { color: rgba(200,160,144,0.8); text-decoration: none; }
 <section class="concept" id="concept">
   <p class="sec-en">— Concept —</p>
   <h2 class="sec-title">スチームフェイシャルとは</h2>
-  <div class="gold-line"></div>
+  <div class="gold-divider"><span>✦</span></div>
   <div class="concept-inner">
-    <div class="concept-art">
-      <div class="concept-art-icon">💆‍♀️</div>
+    <div class="concept-visual">
+      <div class="concept-frame">
+        <div class="concept-emoji">💆‍♀️</div>
+      </div>
+      <div class="concept-flower" style="top:-15px;right:-10px;animation-duration:4s;animation-delay:0s;">🌸</div>
+      <div class="concept-flower" style="bottom:20px;left:-15px;animation-duration:5s;animation-delay:1.5s;">🌹</div>
+      <div class="sparkle-cross" style="position:absolute;top:10px;left:10px;font-size:1.3rem;color:rgba(200,168,100,0.7);animation-duration:3.2s;animation-delay:0.5s;">✦</div>
+      <div class="sparkle-cross" style="position:absolute;bottom:40px;right:10px;font-size:1rem;color:rgba(200,168,100,0.6);animation-duration:4s;animation-delay:2s;">✦</div>
     </div>
     <div class="concept-text">
-      <h3>"蒸気の熱で、<br>毛穴の奥まで<br>やさしくほぐす。"</h3>
-      <p>フェイシャルスチームとは、温かい蒸気を顔に当てながら行うエステのこと。毛穴を開かせ、余分な皮脂や汚れをやさしく浮き上がらせることで、素肌の透明感を引き出します。</p>
-      <p>忙しい毎日の中で、顔だけに集中した60分。スチームのやわらかな熱が全身の力を抜き、気づけばうとうとしてしまうほどのリラックス感。</p>
-      <div class="concept-point">
-        <p>✦ <strong>蒸気で毛穴を開いて</strong>クレンジング効果アップ<br>
-        ✦ <strong>血行促進</strong>で顔色がぱっと明るく<br>
-        ✦ ハンドトリートメントで<strong>リフトアップ</strong>効果</p>
+      <h3>"800℃の蒸気が<br>毛穴の奥まで届く、<br>贅沢なケアを。"</h3>
+      <p>フェイシャルスチームとは、温かい蒸気を顔に当てながら行うエステのこと。毛穴をふっくら開かせ、余分な皮脂や汚れをやさしく浮き上がらせることで、素肌の透明感と潤いを引き出します。</p>
+      <p>忙しい毎日の中で、顔だけに集中した特別な時間。蒸気のやわらかな熱が全身をほぐし、気づけばうとうとしてしまうほどの深いリラックス。</p>
+      <div class="concept-feature">
+        <div class="feature-row">
+          <div class="feature-icon">♨️</div>
+          <div class="feature-text">
+            <h5>スチームで毛穴ケア</h5>
+            <p>温かい蒸気で毛穴を開き、クレンジング効果を高めます。</p>
+          </div>
+        </div>
+        <div class="feature-row">
+          <div class="feature-icon">✨</div>
+          <div class="feature-text">
+            <h5>血行促進・透明感アップ</h5>
+            <p>顔色がぱっと明るくなり、くすみのない素肌に整えます。</p>
+          </div>
+        </div>
+        <div class="feature-row">
+          <div class="feature-icon">🤲</div>
+          <div class="feature-text">
+            <h5>ハンドリフトアップ</h5>
+            <p>丁寧なハンドトリートメントでフェイスラインを引き締めます。</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -594,35 +638,41 @@ footer a { color: rgba(200,160,144,0.8); text-decoration: none; }
 <section class="menu" id="menu">
   <p class="sec-en">— Menu —</p>
   <h2 class="sec-title">メニュー・料金</h2>
-  <div class="gold-line"></div>
+  <div class="gold-divider"><span>✦</span></div>
   <p class="sec-sub">すべてのメニューにスチームフェイシャルが含まれます。<br>初回限定のお試し価格もご用意しています😊</p>
   <div class="menu-grid">
     <div class="menu-card">
-      <div class="menu-thumb mt1">✨</div>
+      <div class="menu-card-top mc1">
+        <div class="menu-ribbon">Trial</div>
+        ✨
+      </div>
       <div class="menu-body">
-        <p class="menu-tag">✦ Trial</p>
         <p class="menu-name">お試しフェイシャル</p>
-        <p class="menu-desc">初めての方におすすめ。スチーム＋クレンジング＋保湿のシンプルコース。</p>
+        <p class="menu-desc">初めての方に。スチーム＋クレンジング＋保湿のシンプルコース。肌の状態をじっくり確認しながら丁寧にケアします。</p>
         <p class="menu-price">¥3,000</p>
         <p class="menu-time">🕐 40分</p>
       </div>
     </div>
     <div class="menu-card">
-      <div class="menu-thumb mt2">💫</div>
+      <div class="menu-card-top mc2">
+        <div class="menu-ribbon">Standard</div>
+        💫
+      </div>
       <div class="menu-body">
-        <p class="menu-tag">✦ Standard</p>
         <p class="menu-name">スタンダードコース</p>
-        <p class="menu-desc">スチーム＋毛穴ケア＋美容液導入＋ハンドリフトアップ。透明感UP。</p>
+        <p class="menu-desc">スチーム＋毛穴ケア＋美容液導入＋ハンドリフトアップ。透明感・ハリをしっかり引き出します。</p>
         <p class="menu-price">¥6,000</p>
         <p class="menu-time">🕐 60分</p>
       </div>
     </div>
     <div class="menu-card">
-      <div class="menu-thumb mt3">🌹</div>
+      <div class="menu-card-top mc3">
+        <div class="menu-ribbon">Premium</div>
+        🌹
+      </div>
       <div class="menu-body">
-        <p class="menu-tag">✦ Premium</p>
         <p class="menu-name">プレミアムコース</p>
-        <p class="menu-desc">スタンダード＋頭皮マッサージ＋デコルテケア。全身の緊張をほぐします。</p>
+        <p class="menu-desc">スタンダード＋頭皮マッサージ＋デコルテケア。全身の緊張をほぐし、贅沢な90分をお楽しみください。</p>
         <p class="menu-price">¥9,000</p>
         <p class="menu-time">🕐 90分</p>
       </div>
@@ -634,35 +684,35 @@ footer a { color: rgba(200,160,144,0.8); text-decoration: none; }
 <section class="flow" id="flow">
   <p class="sec-en">— Flow —</p>
   <h2 class="sec-title">施術の流れ</h2>
-  <div class="gold-line"></div>
+  <div class="gold-divider"><span>✦</span></div>
   <p class="sec-sub">初めての方も安心してお越しください。<br>丁寧にご案内いたします😊</p>
   <div class="flow-list">
     <div class="flow-item">
       <div class="flow-num">1</div>
       <div class="flow-content">
         <h4>ご予約 &amp; ご来店</h4>
-        <p>InstagramのDMまたはLINEにてご予約ください。場所・持ち物をご案内いたします。</p>
+        <p>InstagramのDMまたはLINEにてご予約ください。場所・持ち物を事前にご案内いたします。</p>
       </div>
     </div>
     <div class="flow-item">
       <div class="flow-num">2</div>
       <div class="flow-content">
         <h4>カウンセリング</h4>
-        <p>お肌の状態やお悩みをヒアリング。その日のコンディションに合わせてご提案します。</p>
+        <p>お肌の状態やお悩みをゆっくりヒアリング。その日のコンディションに合わせてご提案します。</p>
       </div>
     </div>
     <div class="flow-item">
       <div class="flow-num">3</div>
       <div class="flow-content">
         <h4>クレンジング &amp; スチーム</h4>
-        <p>ていねいなクレンジングの後、スチームで毛穴を開きます。温かい蒸気でほっと一息。</p>
+        <p>ていねいなクレンジングの後、スチームで毛穴を開きます。温かい蒸気でほっと一息。✨</p>
       </div>
     </div>
     <div class="flow-item">
       <div class="flow-num">4</div>
       <div class="flow-content">
         <h4>フェイシャルトリートメント</h4>
-        <p>毛穴ケア・美容液導入・ハンドによるリフトアップ。コースに応じたケアを行います。</p>
+        <p>毛穴ケア・美容液導入・ハンドによるリフトアップ。コースに合わせたケアを丁寧に行います。</p>
       </div>
     </div>
     <div class="flow-item">
@@ -679,21 +729,24 @@ footer a { color: rgba(200,160,144,0.8); text-decoration: none; }
 <section class="voices" id="voices">
   <p class="sec-en">— Voice —</p>
   <h2 class="sec-title">お客様の声</h2>
-  <div class="gold-line"></div>
+  <div class="gold-divider"><span>✦</span></div>
   <div class="voice-grid">
     <div class="voice-card">
-      <p class="voice-stars">★★★★★</p>
+      <p class="voice-stars">★ ★ ★ ★ ★</p>
       <p class="voice-text">スチームが気持ちよくて、途中で眠ってしまいました。施術後は肌がつるつるで、化粧ノリが全然違います！毎月通いたいです。</p>
+      <div class="voice-line"></div>
       <p class="voice-name">30代 / 会社員</p>
     </div>
     <div class="voice-card">
-      <p class="voice-stars">★★★★★</p>
-      <p class="voice-text">毛穴の開きが気になっていましたが、スチーム後のケアで毛穴が目立たなくなりました。先生の手がとても優しくて安心できます。</p>
+      <p class="voice-stars">★ ★ ★ ★ ★</p>
+      <p class="voice-text">毛穴の開きが気になっていましたが、スチームケアで目立たなくなりました。先生の手がとても優しくて安心できます。✨</p>
+      <div class="voice-line"></div>
       <p class="voice-name">40代 / 主婦</p>
     </div>
     <div class="voice-card">
-      <p class="voice-stars">★★★★★</p>
+      <p class="voice-stars">★ ★ ★ ★ ★</p>
       <p class="voice-text">初めてのエステで緊張していましたが、丁寧なカウンセリングで安心しました。終わった後の肌の明るさに感動！また来ます。</p>
+      <div class="voice-line"></div>
       <p class="voice-name">20代 / 学生</p>
     </div>
   </div>
@@ -704,16 +757,16 @@ footer a { color: rgba(200,160,144,0.8); text-decoration: none; }
   <div class="contact-box">
     <p class="sec-en">— Contact —</p>
     <h2 class="sec-title">ご予約・お問い合わせ</h2>
-    <div class="gold-line"></div>
+    <div class="gold-divider"><span>✦</span></div>
     <p>
-      ご予約・ご質問はInstagram DMまたは<br>
+      ご予約・ご質問はInstagramのDMまたは<br>
       LINEからお気軽にどうぞ😊✨<br>
       24時間以内にお返事いたします。
     </p>
     <div class="sns-row">
       <a href="https://www.instagram.com/sample_account/" target="_blank" class="sns-btn sns-ig">📸 Instagram @sample_account</a>
       <a href="#" class="sns-btn sns-line">💬 LINEで予約する</a>
-      <a href="mailto:" class="sns-btn sns-mail">✦ メールで問い合わせ</a>
+      <a href="mailto:" class="sns-btn sns-gold">✦ メールで問い合わせ</a>
     </div>
   </div>
 </section>
@@ -721,9 +774,7 @@ footer a { color: rgba(200,160,144,0.8); text-decoration: none; }
 <footer>
   <p class="footer-logo">Brume Beauté</p>
   <p class="footer-jp">ブリューム・ボーテ ／ スチームフェイシャル専門サロン</p>
-  <p>
-    <a href="#">プライバシーポリシー</a>
-  </p>
+  <p><a href="#">プライバシーポリシー</a></p>
   <p style="margin-top:1rem;">&copy; 2026 Brume Beauté</p>
 </footer>
 
