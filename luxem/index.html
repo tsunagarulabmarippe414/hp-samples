@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Luxe.m | 天然石アクセサリー・アクセスバーズ</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400;1,600&family=M+PLUS+Rounded+1c:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --gold:    #c8a060;
+  --gold2:   #e8c888;
+  --stone:   #9080a8;
+  --amethyst:#b090d0;
+  --rose:    #d09080;
+  --cream:   #fdf8f2;
+  --ivory:   #fffcf8;
+  --dark:    #2a1f30;
+  --text:    #4a3848;
+  --muted:   #907888;
+  --border:  #e8d8c8;
+}
+html { scroll-behavior: smooth; }
+body { font-family: 'M PLUS Rounded 1c','Noto Sans JP',sans-serif; color: var(--text); background: var(--ivory); overflow-x: hidden; }
+
+/* ── キラキラ・宝石の光 ── */
+.gem-wrap { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+.gem-spark {
+  position: absolute; opacity: 0;
+  animation: gemTwinkle ease-in-out infinite;
+}
+@keyframes gemTwinkle { 0%,100%{opacity:0;transform:scale(0.5) rotate(0deg);} 50%{opacity:0.8;transform:scale(1.3) rotate(180deg);} }
+.petal-wrap { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+.petal { position: absolute; top: -50px; opacity: 0; animation: petalFall linear infinite; }
+@keyframes petalFall { 0%{opacity:0;transform:translateX(0) rotate(0deg);} 8%{opacity:0.5;} 92%{opacity:0.2;} 100%{opacity:0;transform:translateX(50px) translateY(110vh) rotate(480deg);} }
+.float-f { position: absolute; animation: floatF ease-in-out infinite; pointer-events: none; }
+@keyframes floatF { 0%,100%{transform:translateY(0) rotate(-4deg);} 50%{transform:translateY(-14px) rotate(4deg);} }
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 300; height: 64px;
+  background: rgba(253,248,242,0.94); backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between; padding: 0 5%;
+}
+.nav-logo {
+  font-family: 'Cormorant Garamond',serif; font-size: 1.4rem; font-style: italic; letter-spacing: 0.1em;
+  background: linear-gradient(135deg, var(--gold), var(--amethyst));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  text-decoration: none;
+}
+.nav-links { display: flex; gap: 1.8rem; list-style: none; }
+.nav-links a { font-size: 0.76rem; color: var(--muted); text-decoration: none; letter-spacing: 0.12em; transition: color 0.2s; }
+.nav-links a:hover { color: var(--gold); }
+.nav-cta {
+  background: linear-gradient(135deg, var(--gold), #a87840);
+  color: #fff; padding: 0.5rem 1.4rem; border-radius: 100px;
+  text-decoration: none; font-size: 0.78rem; font-weight: 700;
+  box-shadow: 0 4px 14px rgba(200,160,96,0.3);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.nav-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(200,160,96,0.45); }
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh; position: relative; z-index: 1;
+  background:
+    radial-gradient(ellipse at 20% 30%, rgba(176,144,208,0.25) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 70%, rgba(200,160,96,0.2) 0%, transparent 50%),
+    radial-gradient(ellipse at 60% 20%, rgba(208,144,128,0.15) 0%, transparent 40%),
+    linear-gradient(160deg, #fdf8f2 0%, #f8f0f5 40%, #f5f0e8 100%);
+  display: flex; align-items: center; justify-content: center;
+  text-align: center; padding: 120px 5% 80px; overflow: hidden;
+}
+.hero-content { position: relative; z-index: 2; max-width: 680px; }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 0.6rem;
+  font-size: 0.7rem; letter-spacing: 0.22em; color: var(--gold);
+  border: 1px solid rgba(200,160,96,0.4); border-radius: 100px;
+  padding: 0.45em 1.6em; margin-bottom: 1.8rem; text-transform: uppercase;
+  background: rgba(255,255,255,0.6);
+}
+.hero-gems { font-size: 2.2rem; margin-bottom: 1rem; letter-spacing: 0.5rem; animation: gemPulse 3s ease-in-out infinite; }
+@keyframes gemPulse { 0%,100%{filter:drop-shadow(0 0 4px rgba(200,160,96,0.3));} 50%{filter:drop-shadow(0 0 16px rgba(176,144,208,0.6));} }
+.hero h1 {
+  font-family: 'Cormorant Garamond',serif;
+  font-size: clamp(2.5rem, 7vw, 4.5rem); font-weight: 300; letter-spacing: 0.1em;
+  line-height: 1.2; margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, var(--dark) 0%, var(--stone) 40%, var(--gold) 70%, var(--dark) 100%);
+  background-size: 300%;
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  animation: shimmer 7s linear infinite;
+}
+@keyframes shimmer { 0%{background-position:0% 50%;} 100%{background-position:300% 50%;} }
+.hero h1 em { font-style: italic; font-weight: 600; }
+.hero-tag {
+  display: inline-block; font-size: 0.7rem; letter-spacing: 0.16em;
+  color: var(--stone); background: rgba(144,128,168,0.1);
+  border: 1px solid rgba(144,128,168,0.3); border-radius: 100px;
+  padding: 0.3em 1.4em; margin-bottom: 1.8rem;
+}
+.hero-sub { font-size: clamp(0.86rem, 2vw, 0.97rem); color: var(--muted); line-height: 2.3; margin-bottom: 2.4rem; font-weight: 300; }
+.hero-buttons { display: flex; flex-wrap: wrap; gap: 1.2rem; justify-content: center; }
+.btn-main {
+  background: linear-gradient(135deg, var(--gold), #a87840);
+  color: #fff; padding: 1rem 2.6rem; border-radius: 100px;
+  text-decoration: none; font-size: 0.9rem; font-weight: 700;
+  box-shadow: 0 8px 28px rgba(200,160,96,0.35); transition: transform 0.25s, box-shadow 0.25s;
+}
+.btn-main:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(200,160,96,0.5); }
+.btn-sub {
+  background: rgba(255,255,255,0.8); color: var(--dark);
+  padding: 1rem 2.6rem; border-radius: 100px;
+  text-decoration: none; font-size: 0.9rem; font-weight: 700;
+  border: 1px solid rgba(200,160,96,0.4); backdrop-filter: blur(8px);
+  transition: background 0.2s;
+}
+.btn-sub:hover { background: rgba(200,160,96,0.1); }
+
+/* ── SECTION BASE ── */
+section { padding: 90px 5%; position: relative; }
+.sec-eyebrow {
+  text-align: center; font-family: 'Cormorant Garamond',serif;
+  font-style: italic; font-size: 1.1rem; letter-spacing: 0.2em;
+  background: linear-gradient(135deg, var(--gold), var(--amethyst));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  margin-bottom: 0.4rem;
+}
+.sec-title { text-align: center; font-size: clamp(1.4rem, 3.5vw, 2rem); font-weight: 700; color: var(--dark); line-height: 1.4; margin-bottom: 0.5rem; }
+.sec-sub { text-align: center; font-size: 0.88rem; line-height: 2.2; max-width: 520px; margin: 0 auto 3rem; font-weight: 300; color: var(--muted); }
+.gem-divider { text-align: center; font-size: 1.1rem; letter-spacing: 0.5rem; margin: 0.8rem 0 2rem; }
+
+/* ── ABOUT ── */
+.about { background: #fff; }
+.about-inner { max-width: 860px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1.3fr; gap: 4rem; align-items: center; }
+.about-img {
+  aspect-ratio: 3/4; border-radius: 40% 60% 50% 50% / 50% 40% 60% 50%;
+  background: linear-gradient(145deg, rgba(176,144,208,0.3) 0%, rgba(200,160,96,0.2) 50%, rgba(208,144,128,0.25) 100%);
+  display: flex; align-items: center; justify-content: center; font-size: 6rem;
+  border: 2px solid rgba(200,160,96,0.2);
+  box-shadow: 0 20px 60px rgba(144,128,168,0.15);
+  position: relative; overflow: hidden;
+}
+.about-img::after { content: '💎🌸💎'; position: absolute; bottom: 10%; font-size: 1.4rem; letter-spacing: 0.5rem; opacity: 0.4; }
+.about-text h3 { font-family: 'Cormorant Garamond',serif; font-size: 1.65rem; font-style: italic; font-weight: 400; color: var(--dark); margin-bottom: 1.2rem; line-height: 1.5; }
+.about-text p { font-size: 0.9rem; color: var(--text); line-height: 2.4; margin-bottom: 0.8rem; font-weight: 300; }
+.about-name { margin-top: 1.6rem; padding-top: 1.2rem; border-top: 1px solid var(--border); font-size: 0.82rem; color: var(--muted); }
+.about-name strong { font-size: 1.05rem; color: var(--dark); display: block; margin-bottom: 0.3rem; font-weight: 700; }
+
+/* ── WORKS ── */
+.works { background: var(--cream); }
+.works-grid { max-width: 960px; margin: 0 auto; display: grid; grid-template-columns: repeat(3,1fr); gap: 1.6rem; }
+.work-card {
+  border-radius: 24px; overflow: hidden; background: #fff;
+  border: 1px solid var(--border);
+  transition: transform 0.3s, box-shadow 0.3s;
+  box-shadow: 0 4px 16px rgba(144,128,168,0.08);
+}
+.work-card:hover { transform: translateY(-8px); box-shadow: 0 20px 48px rgba(144,128,168,0.2); }
+.work-img { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 4rem; position: relative; }
+.work-img::after { content: '✨'; position: absolute; top: 8px; right: 10px; font-size: 0.9rem; opacity: 0.7; }
+.wi1 { background: linear-gradient(145deg, #f0e8f8, #ddd0f0); }
+.wi2 { background: linear-gradient(145deg, #f8f0e0, #eedfc0); }
+.wi3 { background: linear-gradient(145deg, #f0e8e8, #e8d0c8); }
+.wi4 { background: linear-gradient(145deg, #e8f0f8, #c8d8ec); }
+.wi5 { background: linear-gradient(145deg, #f0f8e8, #d8eccc); }
+.wi6 { background: linear-gradient(145deg, #f8e8f0, #ecccd8); }
+.work-info { padding: 1.1rem 1.2rem 1.4rem; }
+.work-tag { font-size: 0.66rem; color: var(--gold); letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 0.3rem; }
+.work-name { font-size: 0.9rem; font-weight: 700; color: var(--dark); margin-bottom: 0.3rem; }
+.work-price { font-size: 0.85rem; color: var(--rose); font-weight: 700; }
+
+/* ── HEALING ── */
+.healing {
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(176,144,208,0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 50%, rgba(200,160,96,0.12) 0%, transparent 50%),
+    #fff;
+}
+.healing-grid { max-width: 820px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.6rem; }
+.healing-card {
+  background: linear-gradient(160deg, var(--cream), rgba(176,144,208,0.08));
+  border-radius: 28px; padding: 2.4rem 1.8rem; text-align: center;
+  border: 1px solid rgba(176,144,208,0.25);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.healing-card:hover { transform: translateY(-6px); box-shadow: 0 16px 40px rgba(144,128,168,0.18); }
+.healing-icon { font-size: 3rem; margin-bottom: 1rem; filter: drop-shadow(0 0 8px rgba(176,144,208,0.5)); }
+.healing-card h4 { font-size: 1rem; font-weight: 700; color: var(--dark); margin-bottom: 0.5rem; }
+.healing-card p { font-size: 0.82rem; color: var(--muted); line-height: 2; font-weight: 300; }
+.healing-price { font-size: 0.92rem; color: var(--stone); font-weight: 700; margin-top: 1rem; }
+
+/* ── VOICE ── */
+.voices { background: var(--cream); }
+.voice-grid { max-width: 820px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.4rem; }
+.voice-card { background: #fff; border-radius: 20px; padding: 1.8rem 1.6rem; border: 1px solid var(--border); }
+.voice-stars { font-size: 0.85rem; color: var(--gold); margin-bottom: 0.8rem; letter-spacing: 0.1rem; }
+.voice-text { font-size: 0.86rem; color: var(--muted); line-height: 2; font-weight: 300; margin-bottom: 1rem; font-style: italic; }
+.voice-name { font-size: 0.76rem; color: rgba(74,56,72,0.4); }
+
+/* ── CONTACT ── */
+.contact {
+  background: linear-gradient(160deg, rgba(176,144,208,0.12) 0%, rgba(200,160,96,0.08) 50%, rgba(176,144,208,0.1) 100%),
+  var(--cream);
+  text-align: center;
+}
+.contact-box {
+  max-width: 500px; margin: 0 auto;
+  background: rgba(255,255,255,0.8); backdrop-filter: blur(16px);
+  border-radius: 32px; padding: 3.2rem 2.5rem;
+  border: 1px solid rgba(200,160,96,0.2);
+  box-shadow: 0 16px 48px rgba(144,128,168,0.12);
+}
+.contact-box p { font-size: 0.88rem; color: var(--muted); line-height: 2.3; margin-bottom: 2rem; font-weight: 300; }
+.sns-row { display: flex; flex-direction: column; gap: 1rem; }
+.sns-btn { display: block; padding: 0.95rem 1.6rem; border-radius: 16px; text-decoration: none; font-size: 0.9rem; font-weight: 700; transition: transform 0.2s, opacity 0.2s; box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+.sns-btn:hover { transform: translateY(-3px); opacity: 0.9; }
+.sns-ig   { background: linear-gradient(90deg, #f58529, #dd2a7b, #8134af); color: #fff; }
+.sns-line { background: #06c755; color: #fff; }
+.sns-mail { background: linear-gradient(135deg, var(--gold), #a87840); color: #fff; }
+
+/* ── FOOTER ── */
+footer { background: var(--dark); color: rgba(255,255,255,0.3); padding: 2.4rem 5%; text-align: center; font-size: 0.75rem; }
+.footer-logo { font-family: 'Cormorant Garamond',serif; font-size: 1.8rem; font-style: italic; letter-spacing: 0.12em; background: linear-gradient(135deg, var(--gold2), var(--amethyst)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 0.3rem; }
+footer a { color: var(--amethyst); text-decoration: none; }
+
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .about-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+  .about-img { max-width: 240px; margin: 0 auto; }
+  .works-grid { grid-template-columns: repeat(2,1fr); }
+}
+@media (max-width: 480px) {
+  .hero h1 { font-size: 2.4rem; }
+  .hero-sub { font-size: 0.83rem; }
+  .works-grid { grid-template-columns: repeat(2,1fr); gap: 0.8rem; }
+  .contact-box { padding: 2rem 1.2rem; }
+  .sec-title { font-size: 1.3rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- 宝石の光 -->
+<div class="gem-wrap">
+  <span class="gem-spark" style="left:8%;top:20%;font-size:0.9rem;animation-duration:3s;animation-delay:0s;">💎</span>
+  <span class="gem-spark" style="left:22%;top:55%;font-size:0.7rem;animation-duration:4s;animation-delay:1s;">✨</span>
+  <span class="gem-spark" style="left:40%;top:15%;font-size:0.8rem;animation-duration:3.5s;animation-delay:2s;">💜</span>
+  <span class="gem-spark" style="left:60%;top:40%;font-size:0.9rem;animation-duration:2.8s;animation-delay:0.5s;">💎</span>
+  <span class="gem-spark" style="left:75%;top:25%;font-size:0.7rem;animation-duration:4.2s;animation-delay:1.5s;">✨</span>
+  <span class="gem-spark" style="left:88%;top:60%;font-size:0.8rem;animation-duration:3.2s;animation-delay:3s;">💎</span>
+</div>
+
+<!-- 花びら -->
+<div class="petal-wrap">
+  <span class="petal" style="left:5%;font-size:1rem;animation-duration:13s;animation-delay:0s;">🌸</span>
+  <span class="petal" style="left:20%;font-size:0.9rem;animation-duration:17s;animation-delay:2s;">🌷</span>
+  <span class="petal" style="left:38%;font-size:1.1rem;animation-duration:11s;animation-delay:4s;">🌸</span>
+  <span class="petal" style="left:55%;font-size:0.8rem;animation-duration:15s;animation-delay:1s;">💜</span>
+  <span class="petal" style="left:70%;font-size:1rem;animation-duration:14s;animation-delay:3s;">🌸</span>
+  <span class="petal" style="left:85%;font-size:0.9rem;animation-duration:12s;animation-delay:5s;">🌷</span>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">✦ Luxe.m</a>
+  <ul class="nav-links">
+    <li><a href="#about">about</a></li>
+    <li><a href="#works">works</a></li>
+    <li><a href="#healing">healing</a></li>
+    <li><a href="#voices">voices</a></li>
+    <li><a href="#contact">contact</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">💎 お問い合わせ</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <span class="float-f" style="top:14%;left:4%;font-size:3rem;animation-duration:5s;animation-delay:0s;">🌸</span>
+  <span class="float-f" style="top:20%;right:5%;font-size:2.5rem;animation-duration:6.5s;animation-delay:1s;">💎</span>
+  <span class="float-f" style="top:50%;left:2%;font-size:2rem;animation-duration:7s;animation-delay:2s;">✨</span>
+  <span class="float-f" style="top:55%;right:3%;font-size:2.8rem;animation-duration:5s;animation-delay:0.5s;">🌷</span>
+  <span class="float-f" style="bottom:20%;left:6%;font-size:2.2rem;animation-duration:6s;animation-delay:3s;">💜</span>
+  <span class="float-f" style="bottom:18%;right:6%;font-size:1.8rem;animation-duration:4.5s;animation-delay:1.5s;">🌸</span>
+
+  <div class="hero-content">
+    <div class="hero-badge">✦ Natural Stone Accessories ✦</div>
+    <div class="hero-gems">💎 🌸 💜</div>
+    <h1>Luxe.m<br><em>リュクス・エム</em></h1>
+    <div class="hero-tag">天然石アクセサリー作家 ／ アクセスバーズ</div>
+    <p class="hero-sub">
+      天然石がもつ、ひとつひとつ違う表情と輝き。✨<br>
+      あなたの内側から光るお守りを、ひとつひとつ手づくりで。
+    </p>
+    <div class="hero-buttons">
+      <a href="#works" class="btn-main">💎 作品を見る</a>
+      <a href="#healing" class="btn-sub">🌸 ヒーリングメニュー</a>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <p class="sec-eyebrow">— About —</p>
+  <h2 class="sec-title">竹村 真紀 について 🌸</h2>
+  <div class="gem-divider">💎 ✦ 🌸 ✦ 💎</div>
+  <div class="about-inner">
+    <div class="about-img">💎</div>
+    <div class="about-text">
+      <h3>"石の声を聴いて、<br>あなたへ届ける。"</h3>
+      <p>天然石のもつエネルギーと美しさに魅せられ、アクセサリー制作をスタート。ひとつひとつの石と丁寧に向き合いながら、その人に合った作品を生み出しています。💎</p>
+      <p>また、意識の変容を促すセラピー「アクセスバーズ」の施術者としても活動中。心と体を整えるセッションをご提供しています。🌸</p>
+      <p>「身につけるたびに、自分を好きになれる」そんなアクセサリーと、「自分らしく輝ける」そんなセッションを大切にしています✨</p>
+      <div class="about-name">
+        <strong>竹村 真紀</strong>
+        天然石アクセサリー作家「Luxe.m（リュクス.エム）」<br>アクセスバーズ 認定施術者
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WORKS -->
+<section class="works" id="works">
+  <p class="sec-eyebrow">— Works —</p>
+  <h2 class="sec-title">天然石アクセサリー ✨</h2>
+  <div class="gem-divider">💎 ✦ 🌸 ✦ 💎</div>
+  <p class="sec-sub">すべて天然石を使ったハンドメイド作品です。<br>1点もの・受注制作・オーダーメイド対応💕</p>
+  <div class="works-grid">
+    <div class="work-card">
+      <div class="work-img wi1">💜</div>
+      <div class="work-info"><p class="work-tag">✦ Amethyst</p><p class="work-name">アメジストブレスレット</p><p class="work-price">¥4,800</p></div>
+    </div>
+    <div class="work-card">
+      <div class="work-img wi2">💛</div>
+      <div class="work-info"><p class="work-tag">✦ Citrine</p><p class="work-name">シトリンネックレス</p><p class="work-price">¥5,500</p></div>
+    </div>
+    <div class="work-card">
+      <div class="work-img wi3">🌸</div>
+      <div class="work-info"><p class="work-tag">✦ Rose Quartz</p><p class="work-name">ローズクォーツピアス</p><p class="work-price">¥3,200</p></div>
+    </div>
+    <div class="work-card">
+      <div class="work-img wi4">💙</div>
+      <div class="work-info"><p class="work-tag">✦ Aquamarine</p><p class="work-name">アクアマリンリング</p><p class="work-price">¥6,000</p></div>
+    </div>
+    <div class="work-card">
+      <div class="work-img wi5">💚</div>
+      <div class="work-info"><p class="work-tag">✦ Jade</p><p class="work-name">翡翠ブレスレット</p><p class="work-price">¥4,200</p></div>
+    </div>
+    <div class="work-card">
+      <div class="work-img wi6">🤍</div>
+      <div class="work-info"><p class="work-tag">✦ Moonstone</p><p class="work-name">ムーンストーンチョーカー</p><p class="work-price">¥5,800</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- HEALING -->
+<section class="healing" id="healing">
+  <p class="sec-eyebrow">— Healing —</p>
+  <h2 class="sec-title">アクセスバーズ 🌸</h2>
+  <div class="gem-divider">✨ ✦ 💜 ✦ ✨</div>
+  <p class="sec-sub">頭部の32のポイントに優しく触れることで、思考や感情のブロックを手放し、本来の自分へ戻っていくセラピーです。</p>
+  <div class="healing-grid">
+    <div class="healing-card">
+      <div class="healing-icon">🌸</div>
+      <h4>初回体験セッション</h4>
+      <p>初めての方向けの60分コース。アクセスバーズについてのご説明から始めます。</p>
+      <p class="healing-price">¥5,000</p>
+    </div>
+    <div class="healing-card">
+      <div class="healing-icon">💜</div>
+      <h4>通常セッション</h4>
+      <p>90分のフルセッション。じっくり丁寧に施術します。何度来ても新しい気づきがあります。</p>
+      <p class="healing-price">¥8,000</p>
+    </div>
+    <div class="healing-card">
+      <div class="healing-icon">✨</div>
+      <h4>ペアセッション</h4>
+      <p>お友達・ご家族と一緒に受けていただけます。シェアする喜びをぜひ体験してください。</p>
+      <p class="healing-price">¥14,000（2名）</p>
+    </div>
+  </div>
+</section>
+
+<!-- VOICES -->
+<section class="voices" id="voices">
+  <p class="sec-eyebrow">— Voices —</p>
+  <h2 class="sec-title">お客様の声 💎</h2>
+  <div class="gem-divider">🌸 ✦ 💜 ✦ 🌸</div>
+  <div class="voice-grid">
+    <div class="voice-card">
+      <div class="voice-stars">★★★★★</div>
+      <p class="voice-text">「天然石の選び方が丁寧で、自分だけのブレスレットができました。毎日身につけています💎」</p>
+      <p class="voice-name">30代・女性</p>
+    </div>
+    <div class="voice-card">
+      <div class="voice-stars">★★★★★</div>
+      <p class="voice-text">「アクセスバーズを受けた翌日、なんだかふわっと軽くなった感じがして驚きました✨」</p>
+      <p class="voice-name">40代・女性</p>
+    </div>
+    <div class="voice-card">
+      <div class="voice-stars">★★★★★</div>
+      <p class="voice-text">「プレゼント用に購入しました。ラッピングも素敵で、友人にとても喜んでもらえました🌸」</p>
+      <p class="voice-name">20代・女性</p>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="contact-box">
+    <p class="sec-eyebrow">— Contact —</p>
+    <h2 class="sec-title">お問い合わせ 💌</h2>
+    <div class="gem-divider">💎 ✦ 🌸 ✦ 💎</div>
+    <p>
+      作品のご購入・オーダー・セッションのご予約など<br>
+      お気軽にご連絡ください✨<br>
+      2日以内にお返事します。
+    </p>
+    <div class="sns-row">
+      <a href="https://www.instagram.com/maki_kirarinco/" target="_blank" class="sns-btn sns-ig">📸 Instagram @maki_kirarinco</a>
+      <a href="#" class="sns-btn sns-line">💬 LINEで相談・予約</a>
+      <a href="mailto:" class="sns-btn sns-mail">✦ メールで問い合わせ</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p class="footer-logo">✦ Luxe.m</p>
+  <p style="margin-bottom:0.3rem;letter-spacing:0.4rem;opacity:0.3;">💎 🌸 💎 🌸 💎</p>
+  <p>天然石アクセサリー作家 ／ アクセスバーズ</p>
+  <p style="margin-top:0.5rem;">&copy; 2026 Luxe.m 竹村 真紀</p>
+</footer>
+
+</body>
+</html>
